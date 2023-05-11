@@ -10,7 +10,9 @@ print(res.status_code)
 soup = BeautifulSoup(res.text, "lxml")
 
 articles = soup.find_all("section", attrs={"class":"news_teaser_module"})
-print(articles)
+# print(articles)
 
 for article in articles:
-    print(article.a.get_text())
+    print("TITLE : ", article.a.get_text())
+    print("DATE : ", article.h2.previous_sibling.previous_sibling.get_text())
+    print("CONTENTS : ", article.h2.find_next_sibling("p").text)

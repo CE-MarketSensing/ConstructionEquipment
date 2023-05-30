@@ -32,55 +32,62 @@ req = urllib.request.Request(url)
 sourcecode = urllib.request.urlopen(url).read()
 soup = BeautifulSoup(sourcecode, "html.parser")
 
-article_data = []
+# article_data = []
 # Scrape articles
-while True:
-    # Get page source and create BeautifulSoup object
-    soup = BeautifulSoup(driver.page_source, "html.parser")
+# while True:
+# Get page source and create BeautifulSoup object
+# soup = BeautifulSoup(driver.page_source, "html.parser")
     
-    # Scrape article details
+# Scrape article details
+article_data = []
+full_address = []
+for i in range(2):
     for article in soup.find_all("div", class_="khl-article-block-headline font-weight-bold h4"):
-        # Get article URL
         address = article.find("a")["href"]
-        full_address = "https://www.construction-europe.com" + address
-        # for _ in range(4):   
-        #     next_page_button = driver.find_element(By.CSS_SELECTOR, '#CategoryPager > div > ul > li:nth-child(2) > a').click()
-        # print(full_address)
-
-    # Click the next page button
-    next_page_button = driver.find_element(By.CSS_SELECTOR, '#CategoryPager > div > ul > li:nth-child(2) > a').click
-    time.sleep(2)
-
-        # Go to article page
-        driver.get(full_address)
-        time.sleep(2)
-        article_soup = BeautifulSoup(driver.page_source, "html.parser")
+        full_address.append("https://www.construction-europe.com" + address)
+        print(full_address)
         
-        # Scrape release date
-        release_date_elem = article_soup.find("span", class_="PubDate")
-        release_date = release_date_elem.text.strip() if release_date_elem else ""
-        
-        # Scrape news title
-        title_elem = article_soup.find("h1", class_="khl-article-page-title")
-        title = title_elem.text.strip() if title_elem else ""
-                
-        # Scrape article content
-        content_elem = article_soup.find("div", class_="col-12 khl-article-page-storybody")
-        paragraphs = content_elem.find_all("p") if content_elem else []
-        content = "\n".join([p.text.strip() for p in paragraphs])
-        
-        # Append article data to the list
-        article_data.append({"Release Date": release_date, "News Title": title, "Article Content": content})
+    next_page_button = driver.find_element(By.CSS_SELECTOR, '.PagedList-skipToNext').click()
+    time.sleep(1)
 
-    # Go to the next page
-    try:
-        next_page_button = driver.find_element(By.CSS_SELECTOR, '#CategoryPager > div > ul > li:nth-child(2) > a').click()
-        # driver.execute_script("arguments[0].scrollIntoView(true);", next_page_button) 
-        # next_page_button.click()
-        time.sleep(2)
-    except:
-        print("No more pages to scrape.")
-        break
+full_address
+
+    # for article in soup.find_all("div", class_="khl-article-block-headline font-weight-bold h4"):
+    #     # Get article URL
+    #     address = article.find("a")["href"]
+    #     full_address = "https://www.construction-europe.com" + address
+    #     for _ in range(3):   
+    #         next_page_button = driver.find_element(By.CSS_SELECTOR, '#CategoryPager > div > ul > li.page-item.PagedList-skipToNext > a').click()
+    #     print(full_address)
+
+    # # # Click the next page button
+    # #     next_page_button = driver.find_element(By.CSS_SELECTOR, '#CategoryPager > div > ul > li.page-item.PagedList-skipToNext > a').click
+    # #     time.sleep(2)
+
+# Go to article page
+driver.get(full_address)
+time.sleep(2)
+article_soup = BeautifulSoup(driver.page_source, "html.parser")
+        
+# Scrape release date
+release_date_elem = article_soup.find("span", class_="PubDate")
+release_date = release_date_elem.text.strip() if release_date_elem else ""
+        
+# Scrape news title
+title_elem = article_soup.find("h1", class_="khl-article-page-title")
+title = title_elem.text.strip() if title_elem else ""
+
+# Scrape article content
+first = article_soup.find("div", class_="col-12 khl-article-page-standfirst").text
+content_elem = article_soup.find("div", class_="col-12 khl-article-page-storybody")
+paragraphs = content_elem.find_all("p") if content_elem else []
+content = "\n".join([p.text.strip() for p in paragraphs])
+content_elem = article_soup.find("div", class_="col-12 khl-article-page-storybody")
+paragraphs = content_elem.find_all("p") if content_elem else []
+content = "\n".join([p.text.strip() for p in paragraphs])
+        
+# Append article data to the list
+article_data.append({"Release Date": release_date, "News Title": title, "Article Content": content})
 
 driver.quit()
 
@@ -88,4 +95,4 @@ driver.quit()
 df = pd.DataFrame(article_data)
 
 # Save DataFrame to CSV
-df.to_csv("construction2.csv", index=False)
+df.to_csv("construction3.csv", index=False)

@@ -2,7 +2,7 @@
 
 1. Excavator :	<https://www.komatsu.eu/en/excavators>
 2. Wheel loader :	<https://www.komatsu.eu/en/wheel-loaders>
-3. Articulated Dump Truck :	<https://www.komatsu.eu/en/dump-trucks>
+3. Dump Truck :	<https://www.komatsu.eu/en/dump-trucks>
 
 |    | **범주**     | **기종**                                                                                                                                             |
 |----|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
